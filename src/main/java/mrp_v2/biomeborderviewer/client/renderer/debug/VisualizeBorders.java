@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundChunksBiomesPacket;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.ChunkStatus;
@@ -52,12 +53,16 @@ public class VisualizeBorders {
         biomeBorderData.chunkUnloaded(chunkPos);
     }
 
+    public static void reSync() {
+        biomeBorderData.reSync();
+    }
+
     public static void bordersKeyPressed() {
         if (biomeBorderData.areNoChunksLoaded()) {
             return;
         }
         showingBorders = !showingBorders;
-        LogManager.getLogger().debug("Show Borders hotkey pressed, showingBorders is now " + showingBorders);
+        LogManager.getLogger().debug("Show Borders hotkey pressed, showingBorders is now {}", showingBorders);
         Minecraft.getInstance().player.sendSystemMessage(Component.literal("Showing borders is now " + showingBorders));
     }
 
@@ -92,7 +97,7 @@ public class VisualizeBorders {
         Vec3 cameraPos = event.getCamera().getPosition();
         biomeBorderData.renderBorders(Util.getChunkColumn(horizontalViewRange, verticalViewRange,
                         new Int3((int) Math.floor(cameraPos.x / 16), (int) Math.floor(cameraPos.y / 16), (int) Math.floor(cameraPos.z / 16))),
-                bufferBuilder, event.getCamera().getEntity().getLevel(), event.getCamera().getPosition().x, event.getCamera().getPosition().y, event.getCamera().getPosition().z);
+                bufferBuilder, event.getCamera().getEntity().level(), event.getCamera().getPosition().x, event.getCamera().getPosition().y, event.getCamera().getPosition().z);
         tesselator.end();
         RenderSystem.disableBlend();
         RenderSystem.defaultBlendFunc();

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import mrp_v2.biomeborderviewer.client.Config;
 import mrp_v2.biomeborderviewer.client.renderer.debug.VisualizeBorders;
 import mrp_v2.biomeborderviewer.util.Util;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkStatus;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.dimension.DimensionType;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
@@ -51,6 +53,10 @@ public class BiomeBorderDataCollection {
 
     public void chunkLoaded(ChunkPos pos) {
         loadedChunks.add(pos);
+    }
+
+    public void reSync() {
+        calculatedChunks.clear();
     }
 
     public void chunkUnloaded(ChunkPos pos) {
